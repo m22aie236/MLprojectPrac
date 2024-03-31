@@ -102,25 +102,36 @@ test_loader = ds_test.pytorch(num_workers=0, batch_size=64, shuffle=False)
 # Initialize TensorBoard writer
 writer = SummaryWriter()
 
-# Initialize the MLP model
-mlp_model = CustomMLP()
+# Model configurations
+configurations = [
+    {'lr': 0.001},  # Configuration 1: Learning rate = 0.001
+    {'lr': 0.01},   # Configuration 2: Learning rate = 0.01
+    {'lr': 0.0001}  # Configuration 3: Learning rate = 0.0001
+]
 
-# Define loss function and optimizer for MLP
-mlp_criterion = nn.CrossEntropyLoss()
-mlp_optimizer = optim.Adam(mlp_model.parameters(), lr=0.001)
+# Train and evaluate MLP model with different configurations
+for i, config in enumerate(configurations, 1):
+    # Initialize the MLP model
+    mlp_model = CustomMLP()
 
-# Train and evaluate MLP model
-train_and_evaluate_model(mlp_model, train_loader, test_loader, mlp_criterion, mlp_optimizer, writer)
+    # Define loss function and optimizer for MLP
+    mlp_criterion = nn.CrossEntropyLoss()
+    mlp_optimizer = optim.Adam(mlp_model.parameters(), lr=config['lr'])
 
-# Initialize the CNN model
-cnn_model = CustomCNN()
+    # Train and evaluate MLP model
+    train_and_evaluate_model(mlp_model, train_loader, test_loader, mlp_criterion, mlp_optimizer, writer)
 
-# Define loss function and optimizer for CNN
-cnn_criterion = nn.CrossEntropyLoss()
-cnn_optimizer = optim.Adam(cnn_model.parameters(), lr=0.001)
+# Train and evaluate CNN model with different configurations
+for i, config in enumerate(configurations, 1):
+    # Initialize the CNN model
+    cnn_model = CustomCNN()
 
-# Train and evaluate CNN model
-train_and_evaluate_model(cnn_model, train_loader, test_loader, cnn_criterion, cnn_optimizer, writer)
+    # Define loss function and optimizer for CNN
+    cnn_criterion = nn.CrossEntropyLoss()
+    cnn_optimizer = optim.Adam(cnn_model.parameters(), lr=config['lr'])
+
+    # Train and evaluate CNN model
+    train_and_evaluate_model(cnn_model, train_loader, test_loader, cnn_criterion, cnn_optimizer, writer)
 
 # Close TensorBoard writer
 writer.close()
